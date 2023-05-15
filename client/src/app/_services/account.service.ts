@@ -7,16 +7,15 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AccountService {
-  baseUrl='https://localhost:5001/api/';
+  baseUrl = 'https://localhost:5001/api/';
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  login(model: any)
-  {
+  login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
-      map((response: User)=> {
+      map((response: User) => {
         const user = response;
         if(user){
           localStorage.setItem('user', JSON.stringify(user))
@@ -26,14 +25,13 @@ export class AccountService {
     )
   }
 
-  register(model:any){
+  register(model: any){
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       map(user => {
         if(user){
-          localStorage.setItem('user',JSON.stringify(user));
+          localStorage.setItem('user', JSON.stringify(user));
           this.currentUserSource.next(user);
         }
-        return user;
       })
     )
   }
@@ -42,7 +40,7 @@ export class AccountService {
     this.currentUserSource.next(user);
   }
 
-  logout() {
+  logout(){
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
   }
